@@ -9,10 +9,11 @@
     "test": "node ./autoTests/index.js"
   },
   "dependencies": {
-    "@rongcloud/engine": "^5.3.4",
-    "@rongcloud/imlib-next": "^5.3.4",
-    "@rongcloud/plugin-rtc": "^5.4.1",
+    "@rongcloud/engine": "^5.9.2",
+    "@rongcloud/imlib-next": "^5.9.2",
+    "@rongcloud/plugin-rtc": "^5.6.17",
     "element-plus": "^2.2.6",
+    "lodash": "^4.17.21",
     "selenium-webdriver": "^4.3.1",
     "showdown": "^2.1.0",
     "vue": "^3.2.25",

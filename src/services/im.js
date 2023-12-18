@@ -28,15 +28,19 @@ const initIM = (APP_KEY, NAVI_URL) => {
   const watchMessage = (msg) => { console.log('收到消息', msg); };
   const onConnected = () => {
     console.log('onConnected');
-    connectionState.value = RongIMLib.ConnectionStatus.CONNECTED;
+    connectionState.value = RongIMLib.RCConnectionStatus.CONNECTED;
   };
   const onDisconnect = () => {
     console.log('onDisconnect');
-    connectionState.value = RongIMLib.ConnectionStatus.DISCONNECTED
+    connectionState.value = RongIMLib.RCConnectionStatus.DISCONNECTED
   };
   const onConnecting = () => {
     console.log('onConnecting');
-    connectionState.value = RongIMLib.ConnectionStatus.CONNECTING;
+    connectionState.value = RongIMLib.RCConnectionStatus.CONNECTING;
+  };
+  const onSuspend = (code) => {
+    console.log('onSuspend', code);
+    connectionState.value = RongIMLib.RCConnectionStatus.SUSPEND;
   };
 
   const Events = RongIMLib.Events;
@@ -50,16 +54,18 @@ const initIM = (APP_KEY, NAVI_URL) => {
   RongIMLib.addEventListener(Events.CONNECTING, onConnecting);
   RongIMLib.addEventListener(Events.CONNECTED, onConnected);
   RongIMLib.addEventListener(Events.DISCONNECT, onDisconnect);
+  RongIMLib.addEventListener(Events.SUSPEND, onSuspend);
 };
 
-const connect = (TOKEN) => {
-  return RongIMLib.connect(TOKEN).then(user => {
-    userId.value = user.data.userId;
-    console.log('connect success', user.data.userId);
-    return true;
-  }).catch(error => {
-    console.error(error);
-  });
+const connect = async (TOKEN) => {
+  const { code, data } = await RongIMLib.connect(TOKEN);
+  if (code !== RongIMLib.ErrorCode.SUCCESS) {
+    console.error('connect error', code);
+    return false;
+  }
+  userId.value = data.userId;
+  console.log('connect success', data.userId);
+  return true;
 };
 
 const disconnect = () => {
